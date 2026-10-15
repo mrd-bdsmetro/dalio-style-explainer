@@ -1,17 +1,17 @@
-# Dalio-style data explainer — 4 visual styles
+# Dalio-style data explainer — visual styles
 
-Bốn mẫu video dọc (1080×1920, ~24 giây) kể cùng một câu chuyện tài chính theo cách Ray Dalio làm video giải thích:
+Các mẫu video dọc (1080×1920, ~24 giây) kể cùng một câu chuyện tài chính theo cách Ray Dalio làm video giải thích:
 **"100 triệu của bạn — sau 10 năm còn lại bao nhiêu?"**
 
 Cùng kịch bản, cùng số liệu; chỉ khác ngôn ngữ hình ảnh. Mỗi mẫu là một file HTML chạy thẳng trên trình duyệt, không cần cài đặt.
 
 ## Xem
 
-Mở `index.html` để xem cả 4 mẫu cạnh nhau. Mở từng file để xem toàn màn hình, có thanh tua, phím `Space` (dừng) và `R` (phát lại).
+Mở `index.html` để xem các mẫu cạnh nhau. Mở từng file để xem toàn màn hình, có thanh tua, phím `Space` (dừng) và `R` (phát lại).
 
 Tham số URL: `?embed` ẩn thanh điều khiển · `?t=12.5` dừng ở giây 12,5 (dùng để chụp khung hình).
 
-## Bốn kiểu
+## Các kiểu
 
 ### A · Biểu đồ là sân khấu — `a-bieu-do.html`
 Theo *Principles for Dealing with the Changing World Order* (2023). Nền tối → sáng. Bốn đường vẽ dần, nhấn từng đường; quỹ cổ phiếu vẽ gập ghềnh rồi rút gọn thành xu hướng.
@@ -33,7 +33,12 @@ Biểu đồ và màu theo [Kumo](https://kumo-ui.com/) của Cloudflare: EChart
 
 ![D](previews/d.jpg)
 
-## Nguyên tắc chung (cả 4 mẫu)
+### E · OpenBtoB trên Kumo — `e-openbtob.html`
+Câu chuyện sản phẩm trên dữ liệu thật: EU27 nhập bao nhiêu cà phê Việt Nam (Eurostat Comext qua API công khai của OpenBtoB, dữ liệu đến 31/07/2026), rồi "ai là người mua". Kumo xanh cho dữ liệu; cam OpenBtoB (`kumo/openbtob-brand.css`, cùng lớp ghi đè với production) chỉ đánh dấu những gì thuộc về OpenBtoB. Đối thủ được ẩn danh.
+
+![E](previews/e.jpg)
+
+## Nguyên tắc chung (mọi mẫu)
 
 - Hỏi trước, đáp sau: mở bằng câu hỏi, không mở bằng sản phẩm.
 - Một khung hình, một ý. Rút gọn dữ liệu ngay trước mắt người xem.
@@ -45,8 +50,8 @@ Biểu đồ và màu theo [Kumo](https://kumo-ui.com/) của Cloudflare: EChart
 ## Cấu trúc
 
 ```
-index.html            so sánh 4 mẫu
-a-*.html … d-*.html   4 mẫu
+index.html            so sánh các mẫu
+a-*.html … e-*.html   các mẫu
 common.js             engine thời gian: mỗi mẫu là hàm render(t)
 common.css            token màu, khung 1080×1920, thanh điều khiển
 brand.js              tên / vai trò / liên hệ hiển thị (placeholder)

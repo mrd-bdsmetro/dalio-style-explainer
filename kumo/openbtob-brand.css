@@ -1,0 +1,16 @@
+/* OpenBtoB brand on top of Kumo: orange stays the brand, Kumo stays the base.
+   Mirrors the @theme override in openbtob app/web/app/globals.css (brand = orange-800,
+   brand text and links = orange-700, 5.22:1 on white). Orange values are Tailwind v4's
+   theme.css, declared here because these samples load Kumo without Tailwind.
+   Load after kumo-theme-base.css. */
+:root,
+[data-theme="kumo"] {
+  --color-orange-700: oklch(55.3% 0.195 38.402);
+  --color-orange-800: oklch(47% 0.157 37.304);
+  --color-orange-900: oklch(40.8% 0.123 38.172);
+
+  --color-kumo-brand: var(--color-orange-800);
+  --color-kumo-brand-hover: var(--color-orange-900);
+  --text-color-kumo-brand: var(--color-orange-700);
+  --text-color-kumo-link: var(--color-orange-700);
+}

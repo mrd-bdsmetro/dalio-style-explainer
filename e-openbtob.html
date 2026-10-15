@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Mẫu E — OpenBtoB trên Kumo (xanh + cam)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="kumo/kumo-theme-base.css">
+<link rel="stylesheet" href="kumo/openbtob-brand.css">
+<link rel="stylesheet" href="kumo/theme-principles.css">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="kumo/chart-palette.js"></script>
+<style>
+  .stage { background: var(--color-kumo-canvas); color: var(--text-color-kumo-default); font-family: var(--sans); }
+  .card { background: var(--color-kumo-base); border: 1px solid var(--color-kumo-line); border-radius: 20px; }
+  .card-title { font-size: 28px; font-weight: 600; color: var(--text-color-kumo-strong); padding: 0 12px; }
+  .card-note { font-size: 22px; color: var(--text-color-meta); padding: 6px 12px 0; }
+
+  #brand { left: 64px; top: 64px; font-size: 24px; font-weight: 500; color: var(--text-color-meta); }
+  #brand b { color: var(--text-color-kumo-brand); font-weight: 600; }
+
+  #hook { left: 64px; top: 140px; width: 952px; }
+  #hook .q { font-size: 56px; font-weight: 600; line-height: 1.2; letter-spacing: -0.5px; color: var(--text-color-hook); }
+  #hook .meta { font-size: 25px; color: var(--text-color-meta); margin-top: 20px; }
+
+  #monthCard { left: 64px; top: 450px; width: 952px; height: 880px; padding: 32px 24px 16px; }
+  #monthChart { width: 904px; height: 780px; }
+  #total { left: 64px; top: 450px; width: 952px; height: 880px; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+  #total .num { font-size: 190px; font-weight: 600; letter-spacing: -6px; line-height: 1; color: var(--text-color-key-number); font-variant-numeric: tabular-nums; }
+  #total .lbl { font-size: 30px; color: var(--text-color-meta); margin-top: 18px; text-align: center; line-height: 1.4; }
+
+  .cap { left: 70px; width: 940px; top: 1400px; text-align: center; font-size: 40px; font-weight: 500; line-height: 1.35; color: var(--text-color-kumo-default); }
+  .cap b { font-weight: 600; color: var(--text-color-key-number); }
+
+  #key { left: 64px; top: 450px; width: 952px; }
+  #key .lbl { font-size: 28px; color: var(--text-color-meta); }
+  #key .num { font-size: 140px; font-weight: 600; letter-spacing: -4px; line-height: 1.05; color: var(--text-color-key-number-accent); font-variant-numeric: tabular-nums; }
+  #key .num small { font-size: 50px; letter-spacing: 0; }
+
+  #strip { left: 64px; top: 690px; width: 952px; display: flex; border-top: 1px solid var(--color-kumo-hairline); border-bottom: 1px solid var(--color-kumo-hairline); }
+  #strip .it { flex: 1; padding: 24px 0 24px 24px; border-left: 1px solid var(--color-kumo-hairline); }
+  #strip .it:first-child { border-left: 0; padding-left: 0; }
+  #strip .v { font-size: 30px; font-weight: 600; color: var(--text-color-key-number); }
+  #strip .l { font-size: 21px; color: var(--text-color-meta); margin-top: 4px; line-height: 1.35; }
+
+  #priceCard { left: 64px; top: 870px; width: 952px; height: 490px; padding: 30px 24px 10px; }
+  #priceChart { width: 904px; height: 390px; }
+
+  #banner { left: 64px; top: 1395px; width: 952px; padding: 30px 36px; background: var(--color-insight-surface);
+            border: 1px solid var(--color-kumo-line); border-left: 4px solid var(--color-insight-rule); border-radius: 14px; }
+  #banner .t { font-size: 30px; font-weight: 600; color: var(--text-color-kumo-strong); }
+  #banner .d { font-size: 28px; line-height: 1.5; color: var(--text-color-insight); margin-top: 8px; }
+
+  #source { left: 64px; top: 1640px; width: 952px; font-size: 20px; line-height: 1.5; color: var(--text-color-source); }
+  #foot { left: 64px; top: 1770px; width: 952px; display: flex; justify-content: space-between; align-items: center;
+          border-top: 1px solid var(--color-kumo-hairline); padding-top: 30px; }
+  #foot .who { font-size: 26px; color: var(--text-color-meta); }
+  #foot .who b { color: var(--text-color-kumo-brand); font-weight: 600; }
+  #foot .cta-link { font-size: 26px; font-weight: 500; color: var(--text-color-cta); text-decoration: underline; text-underline-offset: 6px; }
+</style>
+</head>
+<body>
+<div class="stage" data-theme="kumo">
+  <div id="brand" class="abs"><b>OpenBtoB</b> · Trade intelligence</div>
+
+  <div id="hook" class="abs">
+    <div class="q">Châu Âu mua bao nhiêu cà phê Việt&nbsp;Nam, và ai là người mua?</div>
+    <div class="meta">12 tháng · 08/2025–07/2026 · nhập khẩu EU27, mã HS 0901</div>
+  </div>
+
+  <div id="monthCard" class="abs card">
+    <div class="card-title">Giá trị nhập khẩu theo tháng (triệu €)</div>
+    <div class="card-note">Nét đứt: trung bình 12 tháng, 242 triệu €</div>
+    <div id="monthChart"></div>
+  </div>
+  <div id="total" class="abs">
+    <div class="num">2,9 tỷ €</div>
+    <div class="lbl">cà phê Việt Nam vào EU27 trong 12 tháng<br>tương đương 697 nghìn tấn</div>
+  </div>
+  <div id="caps"></div>
+
+  <div id="key" class="abs">
+    <div class="lbl">Tìm ra người mua, mỗi năm</div>
+    <div class="num">$199 <small>/ năm</small></div>
+  </div>
+  <div id="strip" class="abs">
+    <div class="it"><div class="v">Có shipment ID</div><div class="l">kèm theo mỗi con số</div></div>
+    <div class="it"><div class="v">Có ngày cập nhật</div><div class="l">dữ liệu đến ngày nào</div></div>
+    <div class="it"><div class="v">Có MCP</div><div class="l">để AI agent tự tra</div></div>
+  </div>
+  <div id="priceCard" class="abs card">
+    <div class="card-title">Gói rẻ nhất của mỗi nền tảng (USD/năm)</div>
+    <div class="card-note">Đổi lại: OpenBtoB mới phủ US, Việt Nam, Trung Quốc; chưa toàn cầu</div>
+    <div id="priceChart"></div>
+  </div>
+
+  <div id="banner" class="abs">
+    <div class="t">Điều này nghĩa là gì?</div>
+    <div class="d">Con số tổng là thông tin công khai. Thứ đáng trả tiền là biết đúng ai đang mua, kèm bằng chứng cho từng lô hàng.</div>
+  </div>
+  <div id="source" class="abs">Nguồn: Eurostat Comext DS-045409 qua api.openbtob.com, dữ liệu đến 31/07/2026. Giá: gói rẻ nhất công bố của 5 nền tảng dữ liệu thương mại, khảo sát 09/2026.</div>
+  <div id="foot" class="abs">
+    <div class="who"><b>OpenBtoB</b> · openbtob.com</div>
+    <div class="cta-link">Xem dữ liệu cà phê VN → EU</div>
+  </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+const { p, lerp, fade, num } = TH;
+const CP = window.ChartPalette;
+const FONT = 'Inter';
+// ECharts draws on canvas and cannot read CSS variables: resolve a Kumo token to rgb once
+function token(name) {
+  const probe = document.createElement('div');
+  probe.style.color = `var(${name})`;
+  document.querySelector('.stage').appendChild(probe);
+  const cv = document.createElement('canvas'); cv.width = cv.height = 1;
+  const ctx = cv.getContext('2d');
+  ctx.fillStyle = getComputedStyle(probe).color; ctx.fillRect(0, 0, 1, 1);
+  probe.remove();
+  const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+  return `rgb(${r},${g},${b})`;
+}
+const STRONG = token('--text-color-kumo-strong');
+// orange marks only what is OpenBtoB's own; market data stays Kumo blue / neutral
+const BRAND = token('--text-color-kumo-brand');
+const C = {
+  series: CP.categorical(0),
+  context: CP.sequential('blues')[1],
+  negative: CP.semantic('Attention'),
+  bench: CP.text('primary'),
+};
+
+// Snapshot of GET api.openbtob.com/api/macro/eu-lane?partner=VN&code=0901 (data_through 2026-07-31)
+const MONTHS = [
+  ['2025-08', 239662250], ['2025-09', 195513731], ['2025-10', 172.5e6], ['2025-11', 178.9e6],
+  ['2025-12', 137.5e6], ['2026-01', 214.3e6], ['2026-02', 286.5e6], ['2026-03', 353.4e6],
+  ['2026-04', 342.5e6], ['2026-05', 303.2e6], ['2026-06', 268.0e6], ['2026-07', 214.4e6],
+].map(([period, eur]) => ({ period, m: eur / 1e6 }));
+const AVG = MONTHS.reduce((s, x) => s + x.m, 0) / MONTHS.length;
+const LOW = MONTHS.reduce((a, b) => (b.m < a.m ? b : a));
+const HIGH = MONTHS.reduce((a, b) => (b.m > a.m ? b : a));
+const label = (period) => { const [y, mo] = period.split('-'); return `${+mo}/${y.slice(2)}`; };
+
+// Entry plans observed 09/2026; competitors unnamed on purpose
+const PRICES = [
+  { name: 'Nền tảng A', v: 1500 }, { name: 'Nền tảng B', v: 1200 }, { name: 'Nền tảng C', v: 1099 },
+  { name: 'Nền tảng D', v: 999 }, { name: 'Nền tảng E', v: 770 }, { name: 'OpenBtoB', v: 199, own: true },
+];
+const FLOOR = Math.min(...PRICES.filter((x) => !x.own).map((x) => x.v));
+
+const monthChart = echarts.init(document.getElementById('monthChart'));
+const priceChart = echarts.init(document.getElementById('priceChart'));
+
+function monthOption(t) {
+  const collapse = p(t, 12.6, 13.6);
+  const markLow = p(t, 9.5, 10.1);
+  return {
+    animation: false, textStyle: { fontFamily: FONT },
+    grid: { left: 20, right: 20, top: 60, bottom: 50 },
+    xAxis: { type: 'category', data: MONTHS.map((x) => label(x.period)), axisTick: { show: false },
+             axisLine: { lineStyle: { color: C.bench, opacity: 1 - collapse } }, axisLabel: { color: C.bench, fontFamily: FONT, fontSize: 19, opacity: 1 - collapse } },
+    yAxis: { type: 'value', min: 0, max: 400, show: false },
+    series: [{
+      type: 'bar', barWidth: 46, silent: true,
+      data: MONTHS.map((x, i) => {
+        const k = p(t, 3.6 + i * 0.18, 4.4 + i * 0.18) * (1 - collapse);
+        const isLow = x === LOW && markLow > 0;
+        return {
+          value: x.m * k,
+          itemStyle: { color: isLow ? C.negative : C.series, borderRadius: [4, 4, 0, 0], opacity: 1 - collapse },
+          label: {
+            show: k > 0.6, position: 'top', fontFamily: FONT, fontSize: 19, fontWeight: 600,
+            color: isLow ? C.negative : STRONG, opacity: 1 - collapse,
+            formatter: () => (isLow ? `Thấp nhất\n${num(x.m, 1)}` : x === HIGH && markLow > 0 ? `Cao nhất\n${num(x.m)}` : num(x.m)),
+          },
+        };
+      }),
+      markLine: {
+        symbol: 'none', silent: true, label: { show: false },
+        lineStyle: { color: C.bench, type: [10, 8], width: 2, opacity: p(t, 6.5, 7.1) * (1 - collapse) },
+        data: [{ yAxis: AVG }],
+      },
+    }],
+  };
+}
+
+function priceOption(t) {
+  return {
+    animation: false, textStyle: { fontFamily: FONT },
+    grid: { left: 190, right: 120, top: 20, bottom: 10 },
+    xAxis: { type: 'value', min: 0, max: 1600, show: false },
+    yAxis: { type: 'category', data: PRICES.map((x) => x.name), axisLine: { show: false }, axisTick: { show: false },
+             axisLabel: { color: STRONG, fontFamily: FONT, fontSize: 23, fontWeight: 500 } },
+    series: [{
+      type: 'bar', barWidth: 38, silent: true,
+      data: PRICES.map((x, i) => {
+        const k = p(t, 16.8 + i * 0.25, 17.6 + i * 0.25);
+        return { value: x.v * k, itemStyle: { color: x.own ? BRAND : C.context, borderRadius: 4 },
+                 label: { show: k > 0.05, position: 'right', fontFamily: FONT, fontSize: 23, fontWeight: 600, color: STRONG,
+                          formatter: () => '$' + Math.round(x.v * k).toLocaleString('en-US') } };
+      }),
+      markLine: {
+        symbol: 'none', silent: true, label: { show: false },
+        lineStyle: { color: C.bench, type: [10, 8], width: 2, opacity: p(t, 18.4, 18.9) },
+        data: [{ xAxis: FLOOR }],
+      },
+    }],
+  };
+}
+
+const CAPS = [
+  [3.2, 6.4,   `12 tháng, EU27 nhập <b>2,9 tỷ €</b> cà phê Việt Nam.`],
+  [6.5, 9.4,   `Trung bình <b>${num(AVG)} triệu €</b> mỗi tháng.`],
+  [9.5, 12.5,  `Thấp nhất tháng 12/2025: <b>${num(LOW.m, 1)} triệu €</b>.<br>Cao nhất tháng 3/2026: <b>${num(HIGH.m)} triệu €</b>.`],
+  [12.6, 15.0, 'Con số tổng này là dữ liệu công khai, ai cũng tra được.'],
+  [15.1, 16.4, 'Câu hỏi đáng tiền là: <b>ai</b> đang mua?'],
+];
+const capsEl = document.getElementById('caps');
+const capEls = CAPS.map(([, , html]) => {
+  const d = document.createElement('div'); d.className = 'abs cap'; d.innerHTML = html; capsEl.appendChild(d); return d;
+});
+// card note on the price chart names the benchmark
+document.querySelector('#priceCard .card-note').insertAdjacentHTML('beforebegin',
+  `<div class="card-note">Nét đứt: gói rẻ nhất thị trường, $${FLOOR.toLocaleString('en-US')}/năm · rẻ hơn ${num(FLOOR / 199, 1)} lần</div>`);
+
+const $ = (id) => document.getElementById(id);
+const show = (el, o, dy = 0) => { el.style.opacity = o; el.style.transform = `translateY(${(1 - o) * dy}px)`; };
+
+function render(t) {
+  show($('brand'), p(t, 0, 0.6));
+  show($('hook'), p(t, 0.2, 1.0), 20);
+
+  // act 1: monthly evidence, then collapse to one number
+  const m = p(t, 3.0, 3.6) * (1 - p(t, 15.0, 15.6));
+  show($('monthCard'), m, 24);
+  if (m > 0) monthChart.setOption(monthOption(t), true);
+  show($('total'), p(t, 13.2, 14.0) * (1 - p(t, 15.0, 15.6)), 20);
+  CAPS.forEach(([a, b], i) => show(capEls[i], fade(t, a, a + 0.35, b - 0.3, b), 14));
+
+  // act 2: the paid question — who buys — and its price
+  show($('key'), p(t, 16.0, 16.6), 20);
+  show($('strip'), p(t, 16.4, 17.0), 16);
+  const pv = p(t, 16.5, 17.1);
+  show($('priceCard'), pv, 20);
+  if (pv > 0) priceChart.setOption(priceOption(t), true);
+  show($('banner'), p(t, 19.8, 20.5), 16);
+  show($('source'), p(t, 20.6, 21.2));
+  show($('foot'), p(t, 20.8, 21.5), 12);
+}
+
+TH.run({ duration: 23.5, hold: 3, render });
+</script>
+</body>
+</html>
