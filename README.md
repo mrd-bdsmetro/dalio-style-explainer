@@ -38,6 +38,11 @@ Câu chuyện sản phẩm trên dữ liệu thật: EU27 nhập bao nhiêu cà 
 
 ![E](previews/e.jpg)
 
+### F · Cỗ máy thương mại — `f-co-may-thuong-mai.html` (video kiến thức, 54 giây)
+Cách kể của *How The Economic Machine Works* trên nền Kumo + cam OpenBtoB: một giao dịch (hàng đi, tiền về) → mỗi lô hàng để lại một bản ghi → khoảng 290 chấm bản ghi rơi xuống, tự xếp theo tháng thành biểu đồ thật (1 chấm ≈ 10 triệu €) → đi ngược từ số tổng về từng bản ghi để ra người mua → ba điều nên nhớ. Câu thần chú "Mỗi lô hàng đều để lại dấu vết" lặp ba lần. Bản ghi và tên công ty là minh họa; số tổng là dữ liệu thật.
+
+![F](previews/f.jpg)
+
 ## Nguyên tắc chung (mọi mẫu)
 
 - Hỏi trước, đáp sau: mở bằng câu hỏi, không mở bằng sản phẩm.
@@ -51,7 +56,7 @@ Câu chuyện sản phẩm trên dữ liệu thật: EU27 nhập bao nhiêu cà 
 
 ```
 index.html            so sánh các mẫu
-a-*.html … e-*.html   các mẫu
+a-*.html … f-*.html   các mẫu
 common.js             engine thời gian: mỗi mẫu là hàm render(t)
 common.css            token màu, khung 1080×1920, thanh điều khiển
 brand.js              tên / vai trò / liên hệ hiển thị (placeholder)
