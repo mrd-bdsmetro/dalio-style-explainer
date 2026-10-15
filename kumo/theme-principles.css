@@ -1,0 +1,58 @@
+/* kumo-principles v1 (2026-10-15)
+   Semantic ALIAS tokens: data-storytelling design principles (data tells the story,
+   whisper not shout, one idea per view) expressed on top of Cloudflare Kumo.
+   No new colour values: every colour points at an existing Kumo variable from
+   @cloudflare/kumo 2.14.0 src/styles/theme-kumo.css, so light/dark and any app
+   override of --color-kumo-brand flow through unchanged.
+
+   Load AFTER Kumo's stylesheet. Declared on every scope where Kumo switches
+   mode, so a nested [data-mode="dark"] re-resolves the aliases there.
+   Kumo Chart (ECharts canvas) cannot read CSS vars: use ChartPalette, see README. */
+
+:root,
+[data-theme],
+[data-mode] {
+  /* Data viz: one series colour, at most one negative element */
+  --color-viz-series: var(--color-kumo-brand);
+  --color-viz-context: color-mix(in srgb, var(--color-kumo-brand) 50%, transparent); /* only with values printed as text */
+  --color-viz-negative: var(--color-kumo-danger); /* ONE element per chart, always with a text label */
+  --color-viz-benchmark: var(--text-color-kumo-subtle); /* dashed line, 4.73:1 light / 7.37:1 dark */
+  --color-viz-grid: var(--color-kumo-hairline); /* decorative; default is no grid */
+  --color-viz-track: var(--color-kumo-fill); /* decorative bar track */
+  --text-color-viz-label: var(--text-color-kumo-default);
+  --text-color-viz-negative: var(--text-color-kumo-danger);
+  --viz-benchmark-width: 1px;
+  --viz-benchmark-dash: 4px;
+  --radius-viz-bar: var(--radius-xs);
+
+  /* Story roles: hook -> key number -> strip -> insight -> meta/source */
+  --text-color-hook: var(--text-color-kumo-default);
+  --text-color-key-number: var(--text-color-kumo-strong); /* safe default: emphasis by size, not colour */
+  --text-color-key-number-accent: var(--text-color-kumo-brand); /* opt-in, only where it measures >= 3:1 at >= 24px */
+  --text-color-insight: var(--text-color-kumo-default);
+  --color-insight-surface: var(--color-kumo-base); /* not tint: subtle text fails AA on tint/recessed */
+  --color-insight-rule: var(--color-kumo-brand);
+  --insight-rule-width: 2px;
+  --text-color-meta: var(--text-color-kumo-subtle); /* time context, on base/canvas only */
+  --text-color-source: var(--text-color-kumo-subtle); /* source line, on base/canvas only */
+  --text-color-cta: var(--text-color-kumo-link);
+
+  /* Type: Kumo + Tailwind v4 scale only */
+  --text-story-hook: var(--text-xl);
+  --text-story-figure: var(--text-3xl);
+  --text-story-strip: var(--text-xl);
+  --text-story-data: var(--text-base); /* Kumo: 14px */
+  --text-story-meta: var(--text-xs); /* Kumo: 12px */
+  --text-story-source: var(--text-xs);
+  --font-weight-key-number: var(--font-weight-semibold);
+
+  /* Rhythm */
+  --spacing-idea-gap: calc(var(--spacing) * 8);
+  --spacing-strip-gap: calc(var(--spacing) * 6);
+  --spacing-related: calc(var(--spacing) * 1);
+}
+
+/* Benchmark line helper (plain CSS charts, e.g. inline bars in a table row). */
+.viz-benchmark {
+  border-left: var(--viz-benchmark-width) dashed var(--color-viz-benchmark);
+}

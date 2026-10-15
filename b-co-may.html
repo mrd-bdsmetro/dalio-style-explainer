@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Mẫu B — Cỗ máy nét mảnh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<style>
+  #brand { left: 64px; top: 64px; }
+  #brand .n { font-size: 30px; font-weight: 800; }
+  #brand .r { font-size: 15px; font-weight: 600; letter-spacing: 5px; text-transform: uppercase; color: var(--text-3); margin-top: 6px; }
+
+  #hook { left: 64px; top: 170px; width: 952px; }
+  #hook .title { font-size: 66px; font-weight: 800; line-height: 1.12; letter-spacing: -1px; margin-top: 24px; }
+  #hook .meta { font-size: 24px; color: var(--text-2); margin-top: 22px; }
+
+  /* line art: one ink, money is the only colour */
+  .ink { fill: none; stroke: var(--text); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+  .ink-thin { stroke-width: 3.5; }
+  .bill { fill: var(--green); stroke: var(--text); stroke-width: 3.5; }
+  .fill-money { fill: var(--green); }
+  .fill-neg { fill: var(--negative); }
+  .drop { fill: var(--negative); }
+  .bench { stroke: var(--text-3); stroke-width: 3; stroke-dasharray: 12 10; fill: none; }
+  .tick { font: 600 21px var(--sans); fill: var(--text-3); }
+  .bundle-lbl { font: 800 30px var(--sans); fill: var(--text); }
+  .bracket { stroke: var(--warm); stroke-width: 5; fill: none; stroke-linecap: round; }
+  .badge-bg { fill: var(--green); }
+  .badge-tx { font: 800 20px var(--sans); fill: var(--white); }
+
+  .jl { width: 230px; text-align: center; top: 1432px; }
+  .jl .nm { font-size: 23px; font-weight: 600; color: var(--text-2); }
+  .jl .v { font-size: 38px; font-weight: 800; margin-top: 4px; }
+
+  .cap {
+    left: 70px; width: 940px; top: 1565px; text-align: center;
+    font-size: 42px; font-weight: 500; line-height: 1.35;
+  }
+  .cap b { font-weight: 800; }
+
+  #hero { left: 64px; top: 540px; width: 952px; text-align: center; }
+  #hero .lead { font-size: 40px; color: var(--text-2); }
+  #hero .big { font-size: 170px; font-weight: 900; letter-spacing: -5px; line-height: 1.05; }
+  #hero .big small { font-size: 60px; font-weight: 800; letter-spacing: -1px; }
+
+  #closingBox { left: 64px; top: 1555px; width: 952px; text-align: center; }
+  #closingBox .closing { font-size: 60px; line-height: 1.2; }
+  #source { left: 64px; top: 1690px; width: 952px; text-align: center; }
+  #footer { left: 64px; top: 1770px; width: 952px; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="abs fill grid-light"></div>
+
+  <div id="brand" class="abs"><div class="n" data-brand="name"></div><div class="r" data-brand="role"></div></div>
+
+  <div id="hook" class="abs">
+    <div class="tag on-light">Câu hỏi tài chính</div>
+    <div class="title"><span class="green-text">100 triệu</span> của bạn —<br>sau 10 năm còn lại<br>bao nhiêu?</div>
+    <div class="meta">Dữ liệu 10 năm · 2015–2025 · Lạm phát giả định 4%/năm</div>
+  </div>
+
+  <svg class="abs" style="left:0;top:0" width="1080" height="1920" viewBox="0 0 1080 1920">
+    <defs>
+      <!-- slight wobble so strokes read as hand-drawn -->
+      <filter id="hand" x="-5%" y="-5%" width="110%" height="110%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="7"/>
+        <feDisplacementMap in="SourceGraphic" scale="5"/>
+      </filter>
+    </defs>
+    <g id="art" filter="url(#hand)"></g>
+    <g id="overlay"></g>
+  </svg>
+
+  <div id="labels"></div>
+  <div id="caps"></div>
+
+  <div id="hero" class="abs">
+    <div class="lead">Cùng 100 triệu. Chênh nhau</div>
+    <div class="big warm"><span id="heroNum">0</span> <small>triệu</small></div>
+  </div>
+
+  <div id="closingBox" class="abs"><div class="closing">Hiểu rủi ro trước. Chọn quỹ sau.</div></div>
+  <div id="source" class="abs source">Nguồn: Hiệu suất tham khảo quỹ mở 2015–2025 · Lãi suất NHNN · Số liệu minh họa, không phải cam kết lợi nhuận.</div>
+  <div id="footer" class="abs footer">
+    <div class="who"><span data-brand="name"></span> <span>· <span data-brand="contact"></span></span></div>
+    <div class="cta">Đặt lịch review kế hoạch</div>
+  </div>
+</div>
+
+<script src="brand.js"></script>
+<script src="common.js"></script>
+<script>
+const { p, lin, lerp, fade, num } = TH;
+const NS = 'http://www.w3.org/2000/svg';
+const art = document.getElementById('art');
+const overlay = document.getElementById('overlay');
+const mk = (tag, attrs, parent = art) => {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  parent.appendChild(e);
+  return e;
+};
+// a stroke that can be drawn on: dashoffset 1 → 0
+const stroke = (d, cls = 'ink', parent = art) => {
+  const e = mk('path', { d, class: cls, pathLength: 1 }, parent);
+  e.style.strokeDasharray = 1;
+  return e;
+};
+const draw = (e, k) => { e.style.strokeDashoffset = 1 - k; };
+
+// --- stick figure holding 100 triệu ---
+const FX = 540;
+const fig = mk('g', {});
+const figParts = [
+  stroke(`M ${FX} 532 a 42 42 0 1 1 -0.1 0`, 'ink', fig),          // head
+  stroke(`M ${FX} 616 L ${FX} 800`, 'ink', fig),                       // body
+  stroke(`M ${FX} 800 L ${FX - 52} 920 M ${FX} 800 L ${FX + 52} 920`, 'ink', fig),
+  stroke(`M ${FX} 660 L ${FX - 70} 745`, 'ink', fig),                  // left arm
+  stroke(`M ${FX} 660 L ${FX + 88} 700`, 'ink', fig),                  // right arm, holding
+];
+const bundle = mk('g', {}, fig);
+[[0, 0], [8, -16], [16, -32]].forEach(([dx, dy]) => mk('rect', { x: FX + 70 + dx, y: 690 + dy, width: 130, height: 56, rx: 6, class: 'bill' }, bundle));
+const bl = mk('text', { x: FX + 150, y: 630, 'text-anchor': 'middle', class: 'bundle-lbl' }, bundle); bl.textContent = '100 triệu';
+
+// --- four jars: same start, four paths ---
+const JW = 190, JTOP = 1060, JBOT = 1410, VMAX = 450;
+const ys = (v) => JBOT - (JBOT - JTOP) * v / VMAX;
+const J = [
+  { name: 'Để yên',       x: 85,  end: 100 / Math.pow(1.04, 10), a: 6.0,  b: 8.8,  dec: 1 },
+  { name: 'Tiết kiệm 6%', x: 335, end: 100 * Math.pow(1.06, 10), a: 9.0,  b: 10.6, dec: 0 },
+  { name: 'Quỹ cân bằng', x: 585, end: 100 * Math.pow(1.10, 10), a: 12.0, b: 13.8, dec: 0 },
+  { name: 'Quỹ cổ phiếu', x: 835, end: 100 * Math.pow(1.15, 10), a: 15.0, b: 17.0, dec: 0 },
+];
+const shades = [1, 0.45, 0.7, 1];
+const labelsEl = document.getElementById('labels');
+J.forEach((j, i) => {
+  const x = j.x, r = 34;
+  const clip = mk('clipPath', { id: 'jar' + i }, art);
+  mk('path', { d: `M ${x} ${JTOP} L ${x} ${JBOT - r} Q ${x} ${JBOT} ${x + r} ${JBOT} L ${x + JW - r} ${JBOT} Q ${x + JW} ${JBOT} ${x + JW} ${JBOT - r} L ${x + JW} ${JTOP} Z` }, clip);
+  j.fill = mk('path', { 'clip-path': `url(#jar${i})`, class: 'fill-money' });
+  j.outline = stroke(`M ${x} ${JTOP} L ${x} ${JBOT - r} Q ${x} ${JBOT} ${x + r} ${JBOT} L ${x + JW - r} ${JBOT} Q ${x + JW} ${JBOT} ${x + JW} ${JBOT - r} L ${x + JW} ${JTOP}`);
+  j.rim = stroke(`M ${x - 14} ${JTOP} L ${x + JW + 14} ${JTOP}`);
+  const lab = document.createElement('div');
+  lab.className = 'abs jl';
+  lab.style.left = x + JW / 2 - 115 + 'px';
+  lab.innerHTML = `<div class="nm">${j.name}</div><div class="v"></div>`;
+  labelsEl.appendChild(lab);
+  j.lab = lab; j.v = lab.querySelector('.v');
+  // bill that flies from the bundle into this jar
+  j.bill = mk('rect', { width: 76, height: 38, rx: 5, class: 'bill' }, overlay);
+});
+// leak in the idle-cash jar: inflation drains it
+const crack = stroke(`M ${85 + JW - 46} ${JBOT - 4} l 8 -14 l 8 12 l 8 -12`, 'ink ink-thin');
+const drops = [0, 1, 2, 3, 4].map(() => mk('circle', { r: 7, class: 'drop' }, overlay));
+// benchmark: bank savings level across all jars
+const bench = mk('path', { d: `M 60 ${ys(J[1].end)} L 1050 ${ys(J[1].end)}`, class: 'bench' }, overlay);
+const benchLbl = mk('text', { x: 14, y: ys(J[1].end) + 7, class: 'tick' }, overlay); benchLbl.textContent = '179tr';
+// gap bracket: stock fund vs bank savings
+const bracket = stroke(`M 1046 ${ys(J[1].end)} L 1046 ${ys(J[3].end)} M 1034 ${ys(J[1].end)} L 1058 ${ys(J[1].end)} M 1034 ${ys(J[3].end)} L 1058 ${ys(J[3].end)}`, 'bracket', overlay);
+const badge = mk('g', {}, overlay);
+mk('rect', { x: J[3].x + JW / 2 - 40, y: JTOP - 62, width: 80, height: 36, rx: 6, class: 'badge-bg' }, badge);
+const bt = mk('text', { x: J[3].x + JW / 2, y: JTOP - 36, 'text-anchor': 'middle', class: 'badge-tx' }, badge); bt.textContent = '★ #1';
+
+function fillPath(j, v, wave, t) {
+  const y = ys(v), x0 = j.x - 2, x1 = j.x + JW + 2;
+  let d = `M ${x0} ${JBOT + 2}`;
+  for (let x = x0; x <= x1; x += 8) d += ` L ${x} ${(y + wave * Math.sin((x - x0) / 26 + t * 9)).toFixed(1)}`;
+  return d + ` L ${x1} ${JBOT + 2} Z`;
+}
+
+const CAPS = [
+  [3.0, 5.9,  'Cùng 100 triệu. Bốn con đường.'],
+  [6.0, 8.9,  'Để yên: lạm phát 4%/năm âm thầm rút đi 1/3 sức mua → còn <b class="warm">67,6 triệu</b>.'],
+  [9.0, 11.9, 'Gửi tiết kiệm 6%/năm → <b class="warm">179 triệu</b>. Đây là mốc so sánh.'],
+  [12.0, 14.9, 'Quỹ cân bằng → <b class="warm">259 triệu</b>.'],
+  [15.0, 18.0, 'Quỹ cổ phiếu: lắc mạnh nhất, nhưng 10 năm → <b class="warm">405 triệu</b>.'],
+  [18.2, 20.4, 'Khoảng chênh đó là phần thưởng cho việc chịu được biến động.'],
+];
+const capsEl = document.getElementById('caps');
+const capEls = CAPS.map(([, , html]) => {
+  const d = document.createElement('div'); d.className = 'abs cap'; d.innerHTML = html; capsEl.appendChild(d); return d;
+});
+
+const $ = (id) => document.getElementById(id);
+const show = (el, o, dy = 0) => { el.style.opacity = o; el.style.transform = `translateY(${(1 - o) * dy}px)`; };
+
+function render(t) {
+  show($('brand'), p(t, 0, 0.6));
+  show($('hook'), p(t, 0.2, 1.0), 20);
+
+  // figure draws itself, hands over the money, then makes room for the insight
+  figParts.forEach((e, i) => draw(e, p(t, 0.6 + i * 0.25, 1.3 + i * 0.25)));
+  bundle.style.opacity = p(t, 1.8, 2.3) * (1 - p(t, 3.4, 4.6));
+  fig.style.opacity = 1 - p(t, 17.6, 18.3);
+
+  // jars draw on, bills fly in, everyone starts at 100
+  J.forEach((j, i) => {
+    draw(j.outline, p(t, 2.4 + i * 0.15, 3.3 + i * 0.15));
+    draw(j.rim, p(t, 2.9 + i * 0.15, 3.4 + i * 0.15));
+    const a = 3.4 + i * 0.25, k = p(t, a, a + 0.9);
+    const bx = lerp(FX + 90, j.x + JW / 2 - 38, k), by = lerp(680, JTOP + 10, k) - Math.sin(Math.PI * k) * 140;
+    j.bill.setAttribute('x', bx); j.bill.setAttribute('y', by);
+    j.bill.style.opacity = t > a && k < 1 ? 1 : 0;
+
+    const start = 100 * p(t, a + 0.8, a + 1.4);
+    const grow = p(t, j.a, j.b);
+    const v = lerp(start, j.end, grow);
+    const settle = i === 3 ? 26 * (1 - lin(t, j.a, j.b + 0.8)) * (t > j.a ? 1 : 0) : 0;
+    j.fill.setAttribute('d', fillPath(j, v, settle, t));
+    j.fill.setAttribute('class', i === 0 && t > 6.0 ? 'fill-neg' : 'fill-money');
+    j.fill.style.opacity = t < j.a ? 0.35 : lerp(0.35, shades[i], p(t, j.a, j.a + 0.6));
+    show(j.lab, p(t, 2.9 + i * 0.15, 3.5 + i * 0.15));
+    j.v.textContent = start > 0.5 ? num(v, t > j.a ? j.dec : 0) + 'tr' : '';
+  });
+
+  // inflation leak
+  draw(crack, p(t, 5.8, 6.3));
+  drops.forEach((d, i) => {
+    const ph = ((t - 6) * 1.5 + i / 5) % 1;
+    const on = t > 6.1 && t < 9.0;
+    d.setAttribute('cx', 85 + JW - 32);
+    d.setAttribute('cy', JBOT + 6 + ph * 90);
+    d.style.opacity = on ? 1 - ph : 0;
+  });
+
+  bench.style.opacity = p(t, 10.4, 11.2);
+  benchLbl.style.opacity = p(t, 10.8, 11.4);
+  badge.style.opacity = p(t, 17.0, 17.5);
+  draw(bracket, p(t, 18.2, 19.2));
+
+  CAPS.forEach(([a, b], i) => show(capEls[i], fade(t, a, a + 0.35, b - 0.3, b), 14));
+
+  show($('hook'), p(t, 0.2, 1.0), 20);
+  show($('hero'), p(t, 18.4, 19.2), 24);
+  $('heroNum').textContent = num(lerp(0, 226, p(t, 18.5, 19.9)));
+  show($('closingBox'), p(t, 20.6, 21.6), 16);
+  show($('source'), p(t, 21.6, 22.2));
+  show($('footer'), p(t, 21.8, 22.6), 16);
+}
+
+TH.run({ duration: 24, hold: 3, render });
+</script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Mẫu A — Biểu đồ là sân khấu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<style>
+  #brand { left: 64px; top: 64px; }
+  #brand .n { font-size: 30px; font-weight: 800; color: var(--white); }
+  #brand .r { font-size: 15px; font-weight: 600; letter-spacing: 5px; text-transform: uppercase; color: var(--dm-60); margin-top: 6px; }
+
+  #hook { left: 64px; top: 600px; width: 952px; transform-origin: 0 0; }
+  #hook .title { font-family: var(--serif); font-size: 92px; line-height: 1.12; color: var(--white); margin-top: 28px; }
+  #hook .title .g { color: var(--green); }
+  #hook .meta { font-size: 26px; color: var(--dm-60); margin-top: 28px; }
+
+  .axis { font: 500 21px var(--sans); fill: var(--dm-40); }
+  .axis-strong { fill: var(--dm-60); }
+  .grid { stroke: var(--dm-10); stroke-width: 1.5; }
+  .grid-base { stroke: var(--dm-20); stroke-width: 2; stroke-dasharray: 6 8; }
+  .baseline { stroke: var(--dm-20); stroke-width: 2; }
+  .ln { fill: none; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+  .ln-stock { stroke: var(--green); }
+  .ln-bal { stroke: var(--green); stroke-opacity: 0.6; }
+  .ln-bench { stroke: var(--dm-60); stroke-width: 4; stroke-dasharray: 12 10; }
+  .ln-neg { stroke: var(--negative); }
+  .dot-stock, .dot-bal { fill: var(--green); }
+  .dot-bench { fill: var(--dm-80); }
+  .dot-neg { fill: var(--negative); }
+  .lbl-name { font: 600 23px var(--sans); fill: var(--dm-60); }
+  .lbl-val { font: 800 40px var(--sans); fill: var(--white); }
+  .lbl-val.on { fill: var(--warm); }
+  .badge-bg { fill: var(--green); }
+  .badge-tx { font: 800 20px var(--sans); fill: var(--white); }
+
+  .cap {
+    left: 70px; width: 940px; top: 1530px; text-align: center;
+    font-size: 44px; font-weight: 500; line-height: 1.35; color: var(--white);
+  }
+  .cap b { font-weight: 800; }
+
+  #hero { left: 64px; top: 300px; width: 952px; }
+  #hero .lead { font-size: 38px; color: var(--text-2); line-height: 1.4; }
+  #hero .big { font-size: 190px; font-weight: 900; letter-spacing: -6px; line-height: 1; margin-top: 18px; }
+  #hero .big small { font-size: 64px; letter-spacing: -1px; font-weight: 800; }
+  .cmp { margin-top: 56px; }
+  .cmp .row { display: flex; align-items: center; gap: 24px; margin-bottom: 22px; }
+  .cmp .nm { flex-shrink: 0; width: 250px; font-size: 26px; font-weight: 600; color: var(--text-2); }
+  .cmp .bar { height: 56px; border-radius: 6px; background: var(--green); }
+  .cmp .v { font-size: 30px; font-weight: 800; }
+
+  #insight { left: 64px; top: 990px; width: 952px; }
+  #insight .body { font-size: 36px; line-height: 1.5; color: var(--text); }
+  #insight .body b { font-weight: 800; }
+  #insight .closing { font-size: 56px; line-height: 1.25; margin-top: 26px; }
+  #source { left: 64px; top: 1600px; width: 952px; }
+  #footer { left: 64px; top: 1720px; width: 952px; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="abs fill grid-light"></div>
+  <div id="bgDark" class="abs fill dark-bg"></div>
+
+  <div id="brand" class="abs"><div class="n" data-brand="name"></div><div class="r" data-brand="role"></div></div>
+
+  <div id="hook" class="abs">
+    <div class="tag on-dark">Câu hỏi tài chính</div>
+    <div class="title"><span class="g">100 triệu</span> của bạn —<br>sau 10 năm còn lại<br>bao nhiêu?</div>
+    <div class="meta">Dữ liệu 10 năm · 2015–2025 · Lạm phát giả định 4%/năm</div>
+  </div>
+
+  <svg id="chart" class="abs" style="left:0;top:0" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+
+  <div id="caps"></div>
+
+  <div id="hero" class="abs">
+    <div class="lead">Cùng 100 triệu ban đầu.<br>Sau 10 năm, chênh nhau</div>
+    <div class="big warm"><span id="heroNum">0</span> <small>triệu</small></div>
+    <div class="cmp">
+      <div class="row" id="r1"><div class="nm">Quỹ cổ phiếu</div><div class="bar" id="b1"></div><div class="v">405tr</div></div>
+      <div class="row" id="r2"><div class="nm">Tiết kiệm 6%</div><div class="bar" id="b2" style="opacity:.45"></div><div class="v">179tr</div></div>
+    </div>
+  </div>
+
+  <div id="insight" class="abs insight-box">
+    <div class="body">Quỹ cổ phiếu tăng <b class="warm">+305%</b> — nhưng cũng là con đường gập ghềnh nhất. Lợi nhuận cao luôn đi kèm biến động.</div>
+    <div class="closing" id="closing">Hiểu rủi ro trước.<br>Chọn quỹ sau.</div>
+  </div>
+
+  <div id="source" class="abs source">Nguồn: Hiệu suất tham khảo quỹ mở 2015–2025 · Lãi suất NHNN · Đường đi của quỹ cổ phiếu là minh họa. Số liệu không phải cam kết lợi nhuận.</div>
+  <div id="footer" class="abs footer">
+    <div class="who"><span data-brand="name"></span> <span>· <span data-brand="contact"></span></span></div>
+    <div class="cta">Đặt lịch review kế hoạch</div>
+  </div>
+</div>
+
+<script src="brand.js"></script>
+<script src="common.js"></script>
+<script>
+const { p, lin, lerp, fade, num } = TH;
+const NS = 'http://www.w3.org/2000/svg';
+const X0 = 150, X1 = 800, YT = 660, YB = 1400, VMAX = 450;
+const xs = (yr) => X0 + (X1 - X0) * yr / 10;
+const ys = (v) => YB - (YB - YT) * v / VMAX;
+const svg = document.getElementById('chart');
+const mk = (tag, attrs, parent = svg) => {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  parent.appendChild(e);
+  return e;
+};
+
+// axes
+const gAxes = mk('g', {});
+[100, 200, 300, 400].forEach((v) => {
+  mk('line', { x1: X0, x2: X1, y1: ys(v), y2: ys(v), class: v === 100 ? 'grid-base' : 'grid' }, gAxes);
+  const tx = mk('text', { x: X0 - 18, y: ys(v) + 7, 'text-anchor': 'end', class: 'axis' + (v === 100 ? ' axis-strong' : '') }, gAxes);
+  tx.textContent = v + 'tr';
+});
+mk('line', { x1: X0, x2: X1, y1: YB, y2: YB, class: 'baseline' }, gAxes);
+for (let y = 2015; y <= 2025; y += 2) {
+  const tx = mk('text', { x: xs(y - 2015), y: YB + 46, 'text-anchor': 'middle', class: 'axis' }, gAxes);
+  tx.textContent = y;
+}
+
+// series: illustrative constant annual rates that reproduce the poster's 10-year values
+const S = [
+  { id: 'neg',   name: 'Để yên (sức mua)', f: (y) => 100 / Math.pow(1.04, y), a: 5.0,  b: 7.4,  focus: [5.0, 8.0],  dec: 1 },
+  { id: 'bench', name: 'Tiết kiệm 6%',     f: (y) => 100 * Math.pow(1.06, y), a: 8.0,  b: 10.4, focus: [8.0, 11.0], dec: 0 },
+  { id: 'bal',   name: 'Quỹ cân bằng',     f: (y) => 100 * Math.pow(1.10, y), a: 11.0, b: 13.4, focus: [11.0, 14.0], dec: 0 },
+  { id: 'stock', name: 'Quỹ cổ phiếu',     f: (y) => 100 * Math.pow(1.15, y), a: 14.0, b: 16.2, focus: [14.0, 17.6], dec: 0, wiggle: true },
+];
+const gLines = mk('g', {});
+S.forEach((s) => {
+  s.g = mk('g', {}, gLines);
+  s.path = mk('path', { class: 'ln ln-' + s.id }, s.g);
+  s.dot = mk('circle', { r: 11, class: 'dot-' + s.id }, s.g);
+  s.name_ = mk('text', { x: X1 + 26, class: 'lbl-name' }, s.g); s.name_.textContent = s.name;
+  s.val = mk('text', { x: X1 + 26, class: 'lbl-val' }, s.g);
+});
+const stock = S[3];
+const badge = mk('g', {}, stock.g);
+mk('rect', { x: 0, y: -26, width: 78, height: 34, rx: 6, class: 'badge-bg' }, badge);
+const bt = mk('text', { x: 39, y: -2, 'text-anchor': 'middle', class: 'badge-tx' }, badge); bt.textContent = '★ #1';
+
+function value(s, yr, morph) {
+  const base = s.f(yr);
+  if (!s.wiggle) return base;
+  const amp = 0.24 * (1 - morph) * Math.sin(Math.PI * yr / 10);
+  return base * (1 + amp * (0.55 * Math.sin(yr * 2.1) + 0.45 * Math.sin(yr * 4.7 + 0.8)));
+}
+
+// captions (stand-in for the voice-over)
+const CAPS = [
+  [3.2, 4.9,  'Cùng một số vốn: 100 triệu.<br>Bốn con đường.'],
+  [5.0, 7.9,  'Để yên: lạm phát 4%/năm lấy đi 1/3 sức mua → còn <b class="warm">67,6 triệu</b>.'],
+  [8.0, 10.9, 'Gửi tiết kiệm 6%/năm → <b class="warm">179 triệu</b>.<br>Đây là mốc so sánh.'],
+  [11.0, 13.9, 'Quỹ cân bằng → <b class="warm">259 triệu</b>.'],
+  [14.0, 16.2, 'Quỹ cổ phiếu: con đường gập ghềnh nhất…'],
+  [16.3, 18.0, '…nhưng xu hướng 10 năm → <b class="warm">405 triệu</b>.'],
+];
+const capsEl = document.getElementById('caps');
+const capEls = CAPS.map(([, , html]) => {
+  const d = document.createElement('div'); d.className = 'abs cap'; d.innerHTML = html; capsEl.appendChild(d); return d;
+});
+
+const $ = (id) => document.getElementById(id);
+const show = (el, o, dy = 0) => { el.style.opacity = o; el.style.transform = `translateY(${(1 - o) * dy}px)`; };
+
+function render(t) {
+  // act 1 (dark, evidence) → act 2 (light, insight)
+  const toLight = p(t, 18, 19.4);
+  $('bgDark').style.opacity = 1 - toLight;
+  $('brand').style.opacity = fade(t, 0, 0.6) * (1 - p(t, 17.6, 18.4));
+
+  // hook: big, then parks at the top as the chart takes the stage
+  const k = p(t, 3.0, 4.4);
+  const h = $('hook');
+  h.style.opacity = fade(t, 0.2, 1.0) * (1 - p(t, 17.6, 18.4));
+  h.style.transform = `translateY(${lerp(0, -420, k)}px) scale(${lerp(1, 0.6, k)})`;
+
+  // chart
+  svg.style.opacity = p(t, 3.4, 4.6) * (1 - p(t, 17.8, 18.8));
+  const morph = p(t, 16.4, 17.5);
+  const focused = S.find((s) => t >= s.focus[0] && t < s.focus[1]);
+  S.forEach((s) => {
+    const pr = p(t, s.a, s.b);
+    const visible = t >= s.a;
+    s.g.style.display = visible ? '' : 'none';
+    if (!visible) return;
+    const upto = 10 * pr;
+    let d = '';
+    for (let yr = 0; yr <= upto + 1e-9; yr += 0.05) d += (d ? 'L' : 'M') + xs(yr).toFixed(1) + ' ' + ys(value(s, yr, morph)).toFixed(1);
+    const vEnd = value(s, upto, morph);
+    d += 'L' + xs(upto).toFixed(1) + ' ' + ys(vEnd).toFixed(1);
+    s.path.setAttribute('d', d);
+    s.dot.setAttribute('cx', xs(upto)); s.dot.setAttribute('cy', ys(vEnd));
+    s.dot.style.opacity = pr < 1 ? 1 : 0;
+    const ly = ys(vEnd);
+    s.name_.setAttribute('y', ly - 16);
+    s.val.setAttribute('y', ly + 26);
+    s.val.textContent = num(vEnd, s.dec) + ' triệu';
+    s.val.classList.toggle('on', focused === s);
+    s.g.style.opacity = !focused || focused === s ? 1 : 0.28;
+  });
+  badge.setAttribute('transform', `translate(${X1 + 26} ${ys(stock.f(10)) - 54})`);
+  badge.style.opacity = p(t, 16.9, 17.4);
+
+  CAPS.forEach(([a, b], i) => show(capEls[i], fade(t, a, a + 0.35, b - 0.3, b), 16));
+
+  // act 2
+  show($('hero'), p(t, 19.0, 19.8), 30);
+  $('heroNum').textContent = num(lerp(0, 226, p(t, 19.2, 20.6)));
+  $('b1').style.width = 640 * p(t, 19.8, 20.8) + 'px';
+  $('b2').style.width = 640 * (179 / 405) * p(t, 20.0, 21.0) + 'px';
+  show($('insight'), p(t, 21.0, 21.8), 30);
+  $('closing').style.opacity = p(t, 22.0, 22.8);
+  show($('source'), p(t, 22.6, 23.2));
+  show($('footer'), p(t, 22.8, 23.6), 20);
+}
+
+TH.run({ duration: 25, hold: 3, render });
+</script>
+</body>
+</html>

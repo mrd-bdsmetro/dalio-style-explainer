@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Dalio-style explainer — 4 mẫu thử</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #111; color: #ddd; font-family: 'Inter', sans-serif; }
+  header { padding: 20px 28px 8px; display: flex; align-items: baseline; gap: 20px; }
+  h1 { font-size: 20px; margin: 0; color: #fff; }
+  header p { margin: 0; color: #999; font-size: 14px; }
+  button { margin-left: auto; background: #2a2a2a; color: #eee; border: 1px solid #444; border-radius: 6px; padding: 8px 16px; font: 600 13px 'Inter'; cursor: pointer; }
+  .grid { display: flex; gap: 24px; justify-content: center; padding: 12px 28px 28px; }
+  .card { width: 22vw; max-width: 380px; }
+  .frame { width: 100%; aspect-ratio: 9 / 16; border: 0; border-radius: 10px; background: #000; display: block; }
+  .card h2 { font-size: 16px; margin: 12px 0 4px; color: #fff; }
+  .card p { font-size: 13px; line-height: 1.5; color: #aaa; margin: 0 0 6px; }
+  .card a { font-size: 13px; color: #8fd0aa; }
+</style>
+</head>
+<body>
+<header>
+  <h1>100 triệu sau 10 năm — 4 hướng hình ảnh</h1>
+  <p>Cùng kịch bản, cùng số liệu, cùng brand. Chọn hướng — rồi mới dựng Remotion.</p>
+  <button onclick="document.querySelectorAll('iframe').forEach(f => f.src = f.src)">Phát lại cả 4</button>
+</header>
+<div class="grid">
+  <div class="card">
+    <iframe class="frame" src="a-bieu-do.html?embed"></iframe>
+    <h2>A · Biểu đồ là sân khấu</h2>
+    <p>Theo video Dalio 2023. Nền tối → sáng. 4 đường vẽ dần, nhấn từng đường, cổ phiếu "gập ghềnh rồi rút gọn".</p>
+    <a href="a-bieu-do.html" target="_blank">Mở toàn màn hình + tua</a>
+  </div>
+  <div class="card">
+    <iframe class="frame" src="b-co-may.html?embed"></iframe>
+    <h2>B · Cỗ máy nét mảnh</h2>
+    <p>Theo video Dalio 2013. Người que, 4 cái lọ, lọ "để yên" bị rò vì lạm phát, lọ cổ phiếu sóng sánh.</p>
+    <a href="b-co-may.html" target="_blank">Mở toàn màn hình + tua</a>
+  </div>
+  <div class="card">
+    <iframe class="frame" src="c-poster-dong.html?embed"></iframe>
+    <h2>C · Poster động</h2>
+    <p>Thuần brand v3.1: header tối → hero band xanh → bars đơn sắc → stat cards → insight. Không minh họa.</p>
+    <a href="c-poster-dong.html" target="_blank">Mở toàn màn hình + tua</a>
+  </div>
+  <div class="card">
+    <iframe class="frame" src="d-kumo.html?embed"></iframe>
+    <h2>D · Kumo</h2>
+    <p>Biểu đồ Kumo (ECharts + ChartPalette), màu và chữ theo token Kumo, áp bộ alias nguyên tắc kể chuyện bằng dữ liệu. Không serif.</p>
+    <a href="d-kumo.html" target="_blank">Mở toàn màn hình + tua</a>
+  </div>
+</div>
+</body>
+</html>

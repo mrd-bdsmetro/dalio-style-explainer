@@ -1,0 +1,113 @@
+/* Brand colour tokens — the only place colours are defined */
+:root {
+  --bg: #FAFAFC;
+  --card: #FFFFFF;
+  --border: #E8E8EF;
+  --green: #58A077;
+  --green-text: #3A7B5A;
+  --green-soft: rgba(88,160,119,0.10);
+  --green-mid: rgba(88,160,119,0.25);
+  --warm: #E8B84D;
+  --warm-soft: rgba(232,184,77,0.10);
+  --negative: #E07A8E;
+  --text: #1D1D2B;
+  --text-2: #6B6B7F;
+  --text-3: #9B9BAD;
+  --charcoal: #1C1C2E;
+  --charcoal-soft: #252540;
+  --dm-80: rgba(255,255,255,0.80);
+  --dm-60: rgba(255,255,255,0.60);
+  --dm-40: rgba(255,255,255,0.40);
+  --dm-20: rgba(255,255,255,0.20);
+  --dm-10: rgba(255,255,255,0.10);
+  --white: #FFFFFF;
+
+  /* DM Serif Display has no Vietnamese glyphs; Playfair Display fills the gaps */
+  --serif: 'DM Serif Display', 'Playfair Display', serif;
+  --sans: 'Inter', sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #111; overflow: hidden; font-family: var(--sans); }
+
+.stage {
+  position: absolute;
+  width: 1080px; height: 1920px;
+  transform-origin: 0 0;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+}
+.abs { position: absolute; }
+.fill { inset: 0; }
+
+/* light texture: subtle geometric grid (DNA #6) */
+.grid-light {
+  background-image:
+    linear-gradient(rgba(88,160,119,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88,160,119,0.05) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+.dark-bg { background: var(--charcoal); overflow: hidden; }
+.dark-bg::before {
+  content: ''; position: absolute; top: -160px; right: -160px;
+  width: 620px; height: 620px; border-radius: 50%;
+  background: rgba(88,160,119,0.20); filter: blur(90px);
+}
+.dark-bg::after {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 18px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase;
+  padding: 8px 18px; border-radius: 6px;
+}
+.tag.on-dark { color: var(--green); background: rgba(88,160,119,0.12); border: 1px solid var(--green-mid); }
+.tag.on-light { color: var(--green-text); background: var(--green-soft); border: 1px solid var(--green-mid); }
+
+.closing { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--green-text); }
+.warm { color: var(--warm); }
+.green-text { color: var(--green-text); }
+
+.insight-box {
+  background: var(--green-soft);
+  border-left: 4px solid var(--green);
+  border-radius: 0 16px 16px 0;
+  padding: 36px 40px;
+}
+.source { font-size: 20px; color: var(--text-3); line-height: 1.5; }
+
+.footer {
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 28px;
+}
+.footer .who { font-size: 30px; font-weight: 800; color: var(--text); }
+.footer .who span { font-weight: 500; color: var(--text-2); font-size: 24px; }
+.cta {
+  font-size: 20px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--green-text); border: 1.5px solid var(--green-mid);
+  padding: 14px 20px; border-radius: 10px;
+}
+
+.badge {
+  display: inline-block; background: var(--green); color: var(--white);
+  font-size: 20px; font-weight: 800; padding: 4px 12px; border-radius: 6px;
+}
+
+/* review controls (outside the stage, not part of the video) */
+.th-controls {
+  position: fixed; left: 0; right: 0; bottom: 0; height: 56px;
+  display: flex; align-items: center; gap: 14px; padding: 0 16px;
+  background: #1a1a1a; color: #bbb; font: 13px var(--sans);
+}
+.th-controls input { flex: 1; }
+.th-controls button {
+  background: #2a2a2a; color: #ddd; border: 1px solid #444; border-radius: 6px;
+  padding: 6px 14px; font: 600 13px var(--sans); cursor: pointer; min-width: 72px;
+}

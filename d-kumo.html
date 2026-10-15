@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Mẫu D — Kumo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<link rel="stylesheet" href="kumo/kumo-theme-base.css">
+<link rel="stylesheet" href="kumo/theme-principles.css">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="kumo/chart-palette.js"></script>
+<style>
+  /* Kumo surfaces + the principle aliases only. Kumo ships no font; it inherits the app's sans (Inter here).
+     Sizes are Kumo's scale multiplied for a 1080×1920 video frame. */
+  .stage { background: var(--color-kumo-canvas); color: var(--text-color-kumo-default); font-family: var(--sans); }
+  .card { background: var(--color-kumo-base); border: 1px solid var(--color-kumo-line); border-radius: 20px; }
+
+  #brand { left: 64px; top: 64px; font-size: 24px; font-weight: 500; color: var(--text-color-meta); }
+  #brand b { color: var(--text-color-kumo-strong); font-weight: 600; }
+
+  #hook { left: 64px; top: 140px; width: 952px; }
+  #hook .q { font-size: 60px; font-weight: 600; line-height: 1.18; letter-spacing: -0.5px; color: var(--text-color-hook); }
+  #hook .meta { font-size: 26px; color: var(--text-color-meta); margin-top: 20px; }
+
+  #lineCard { left: 64px; top: 440px; width: 952px; height: 900px; padding: 32px 24px 16px; }
+  .card-title { font-size: 28px; font-weight: 600; color: var(--text-color-kumo-strong); padding: 0 12px; }
+  #lineChart { width: 904px; height: 800px; }
+
+  .cap { left: 70px; width: 940px; top: 1410px; text-align: center; font-size: 40px; font-weight: 500; line-height: 1.35; color: var(--text-color-kumo-default); }
+  .cap b { font-weight: 600; color: var(--text-color-key-number); }
+
+  #key { left: 64px; top: 440px; width: 952px; }
+  #key .lbl { font-size: 28px; color: var(--text-color-meta); }
+  #key .num { font-size: 150px; font-weight: 600; letter-spacing: -4px; line-height: 1.05; color: var(--text-color-key-number); font-variant-numeric: tabular-nums; }
+  #key .num small { font-size: 54px; letter-spacing: 0; }
+
+  #strip { left: 64px; top: 690px; width: 952px; display: flex; border-top: 1px solid var(--color-kumo-hairline); border-bottom: 1px solid var(--color-kumo-hairline); }
+  #strip .it { flex: 1; padding: 26px 0 26px 24px; border-left: 1px solid var(--color-kumo-hairline); }
+  #strip .it:first-child { border-left: 0; padding-left: 0; }
+  #strip .v { font-size: 46px; font-weight: 600; color: var(--text-color-key-number); font-variant-numeric: tabular-nums; }
+  #strip .l { font-size: 22px; color: var(--text-color-meta); margin-top: 4px; }
+
+  #barCard { left: 64px; top: 880px; width: 952px; height: 470px; padding: 30px 24px 10px; }
+  .bench-note { font-weight: 400; color: var(--text-color-meta); }
+  #barChart { width: 904px; height: 400px; }
+
+  /* Banner variant="secondary": insight on base surface with brand rule */
+  #banner { left: 64px; top: 1390px; width: 952px; padding: 30px 36px; background: var(--color-insight-surface);
+            border: 1px solid var(--color-kumo-line); border-left: 4px solid var(--color-insight-rule); border-radius: 14px; }
+  #banner .t { font-size: 30px; font-weight: 600; color: var(--text-color-kumo-strong); }
+  #banner .d { font-size: 28px; line-height: 1.5; color: var(--text-color-insight); margin-top: 8px; }
+
+  #source { left: 64px; top: 1650px; width: 952px; font-size: 20px; line-height: 1.5; color: var(--text-color-source); }
+  #foot { left: 64px; top: 1760px; width: 952px; display: flex; justify-content: space-between; align-items: center;
+          border-top: 1px solid var(--color-kumo-hairline); padding-top: 30px; }
+  #foot .who { font-size: 26px; color: var(--text-color-meta); }
+  #foot .who b { color: var(--text-color-kumo-strong); font-weight: 600; }
+  #foot .cta-link { font-size: 26px; font-weight: 500; color: var(--text-color-cta); text-decoration: underline; text-underline-offset: 6px; }
+</style>
+</head>
+<body>
+<div class="stage" data-theme="kumo">
+  <div id="brand" class="abs"><b data-brand="name"></b> · <span data-brand="role"></span></div>
+
+  <div id="hook" class="abs">
+    <div class="q">100 triệu của bạn, sau 10 năm còn lại bao nhiêu?</div>
+    <div class="meta">Dữ liệu 10 năm · 2015–2025 · lạm phát giả định 4%/năm</div>
+  </div>
+
+  <div id="lineCard" class="abs card">
+    <div class="card-title">Giá trị của 100 triệu theo từng năm</div>
+    <div id="lineChart"></div>
+  </div>
+  <div id="caps"></div>
+
+  <div id="key" class="abs">
+    <div class="lbl">Chênh lệch sau 10 năm, quỹ cổ phiếu so với tiết kiệm</div>
+    <div class="num"><span id="keyNum">0</span> <small>triệu</small></div>
+  </div>
+  <div id="strip" class="abs">
+    <div class="it"><div class="v">+305%</div><div class="l">Quỹ cổ phiếu</div></div>
+    <div class="it"><div class="v">+79%</div><div class="l">Tiết kiệm ngân hàng</div></div>
+    <div class="it"><div class="v">−32,4%</div><div class="l">Sức mua nếu để yên</div></div>
+  </div>
+  <div id="barCard" class="abs card">
+    <div class="card-title">Giá trị sau 10 năm <span class="bench-note">· nét đứt: mốc tiết kiệm 179tr</span></div>
+    <div id="barChart"></div>
+  </div>
+
+  <div id="banner" class="abs">
+    <div class="t">Điều này nghĩa là gì?</div>
+    <div class="d">Lợi nhuận cao nhất cũng đi kèm biến động lớn nhất. Hiểu rủi ro trước, rồi mới chọn quỹ.</div>
+  </div>
+  <div id="source" class="abs">Nguồn: hiệu suất tham khảo quỹ mở 2015–2025, lãi suất NHNN. Đường đi của quỹ cổ phiếu là minh họa; số liệu không phải cam kết lợi nhuận.</div>
+  <div id="foot" class="abs">
+    <div class="who"><b data-brand="name"></b> · <span data-brand="contact"></span></div>
+    <div class="cta-link">Xem cách tính</div>
+  </div>
+</div>
+
+<script src="brand.js"></script>
+<script src="common.js"></script>
+<script>
+const { p, lerp, fade, num } = TH;
+const CP = window.ChartPalette;
+const FONT = 'Inter';
+// ECharts draws on canvas and cannot read CSS variables: resolve a Kumo token to rgb once
+function token(name) {
+  const probe = document.createElement('div');
+  probe.style.color = `var(${name})`;
+  document.querySelector('.stage').appendChild(probe);
+  const cv = document.createElement('canvas'); cv.width = cv.height = 1;
+  const ctx = cv.getContext('2d');
+  ctx.fillStyle = getComputedStyle(probe).color; ctx.fillRect(0, 0, 1, 1);
+  probe.remove();
+  const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+  return `rgb(${r},${g},${b})`;
+}
+const STRONG = token('--text-color-kumo-strong');
+const C = {
+  series: CP.categorical(0),            // monochrome series
+  context: CP.sequential('blues')[1],   // context: value always printed as text
+  negative: CP.semantic('Attention'),   // one negative element, labelled
+  bench: CP.text('primary'),            // benchmark + axis labels
+};
+
+const S = [
+  { id: 'neg',   name: 'Để yên (sức mua)', f: (y) => 100 / Math.pow(1.04, y), a: 5.0,  b: 7.4,  focus: [5.0, 8.0],  color: C.negative, dec: 1 },
+  { id: 'bench', name: 'Tiết kiệm 6%',     f: (y) => 100 * Math.pow(1.06, y), a: 8.0,  b: 10.4, focus: [8.0, 11.0], color: C.bench, dashed: true },
+  { id: 'bal',   name: 'Quỹ cân bằng',     f: (y) => 100 * Math.pow(1.10, y), a: 11.0, b: 13.4, focus: [11.0, 14.0], color: C.context },
+  { id: 'stock', name: 'Quỹ cổ phiếu',     f: (y) => 100 * Math.pow(1.15, y), a: 14.0, b: 16.0, focus: [14.0, 17.4], color: C.series, wiggle: true },
+];
+function value(s, yr, morph) {
+  const base = s.f(yr);
+  if (!s.wiggle) return base;
+  const amp = 0.24 * (1 - morph) * Math.sin(Math.PI * yr / 10);
+  return base * (1 + amp * (0.55 * Math.sin(yr * 2.1) + 0.45 * Math.sin(yr * 4.7 + 0.8)));
+}
+
+const lineChart = echarts.init(document.getElementById('lineChart'), null, { renderer: 'canvas' });
+const barChart = echarts.init(document.getElementById('barChart'), null, { renderer: 'canvas' });
+const axisLabel = { color: C.bench, fontFamily: FONT, fontSize: 22 };
+
+function lineOption(t) {
+  const morph = p(t, 16.2, 17.2);
+  const focused = S.find((s) => t >= s.focus[0] && t < s.focus[1]);
+  return {
+    animation: false,
+    textStyle: { fontFamily: FONT },
+    grid: { left: 80, right: 230, top: 40, bottom: 56 },
+    xAxis: { type: 'value', min: 0, max: 10, interval: 2, axisLabel: { ...axisLabel, formatter: (v) => 2015 + v },
+             axisLine: { lineStyle: { color: C.bench } }, axisTick: { show: false }, splitLine: { show: false } },
+    yAxis: { type: 'value', min: 0, max: 450, interval: 100, axisLabel: { ...axisLabel, formatter: (v) => v + 'tr' },
+             splitLine: { show: false } },
+    series: S.map((s) => {
+      const pr = p(t, s.a, s.b);
+      const upto = 10 * pr;
+      const data = [];
+      if (t >= s.a) {
+        for (let yr = 0; yr < upto; yr += 0.05) data.push([yr, value(s, yr, morph)]);
+        data.push([upto, value(s, upto, morph)]);
+      }
+      const dim = focused && focused !== s ? 0.25 : 1;
+      return {
+        type: 'line', showSymbol: false, data, silent: true,
+        lineStyle: { color: s.color, width: s.dashed ? 4 : 6, type: s.dashed ? [12, 10] : 'solid', opacity: dim },
+        endLabel: {
+          show: data.length > 0, distance: 14, fontFamily: FONT, opacity: dim,
+          formatter: (prm) => `{n|${s.name}}\n{v|${num(prm.value[1], s.dec || 0)} triệu}`,
+          rich: {
+            n: { fontSize: 22, color: C.bench, fontFamily: FONT, lineHeight: 30 },
+            v: { fontSize: 34, fontWeight: 600, color: s.id === 'neg' ? C.negative : STRONG, fontFamily: FONT, lineHeight: 40 },
+          },
+        },
+      };
+    }),
+  };
+}
+
+const BARS = [
+  { name: 'Để yên (sức mua)', v: 67.6, color: C.negative, dec: 1 },
+  { name: 'Tiết kiệm 6%', v: 179, color: C.context },
+  { name: 'Quỹ cân bằng', v: 259, color: C.context },
+  { name: 'Quỹ cổ phiếu', v: 405, color: C.series },
+];
+function barOption(t) {
+  return {
+    animation: false,
+    textStyle: { fontFamily: FONT },
+    grid: { left: 230, right: 150, top: 20, bottom: 20 },
+    xAxis: { type: 'value', min: 0, max: 450, show: false },
+    yAxis: { type: 'category', data: BARS.map((b) => b.name), axisLine: { show: false }, axisTick: { show: false },
+             axisLabel: { color: STRONG, fontFamily: FONT, fontSize: 24, fontWeight: 500 } },
+    series: [{
+      type: 'bar', barWidth: 52, silent: true,
+      data: BARS.map((b, i) => {
+        const k = p(t, 18.2 + i * 0.35, 19.2 + i * 0.35);
+        return { value: b.v * k, itemStyle: { color: b.color, borderRadius: 4 },
+                 label: { show: k > 0.05, position: 'right', fontFamily: FONT, fontSize: 26, fontWeight: 600,
+                          color: i === 0 ? C.negative : STRONG, formatter: () => num(b.v * k, b.dec || 0) + ' triệu' } };
+      }),
+      markLine: {
+        symbol: 'none', silent: true,
+        lineStyle: { color: C.bench, type: [10, 8], width: 2, opacity: p(t, 19.6, 20.2) },
+        label: { show: false },
+        data: [{ xAxis: 179 }],
+      },
+    }],
+  };
+}
+
+const CAPS = [
+  [3.2, 4.9,  'Cùng một số vốn: 100 triệu. Bốn con đường.'],
+  [5.0, 7.9,  'Để yên: lạm phát 4%/năm lấy đi 1/3 sức mua, còn <b>67,6 triệu</b>.'],
+  [8.0, 10.9, 'Gửi tiết kiệm 6%/năm: <b>179 triệu</b>. Đây là mốc so sánh.'],
+  [11.0, 13.9, 'Quỹ cân bằng: <b>259 triệu</b>.'],
+  [14.0, 16.1, 'Quỹ cổ phiếu: con đường gập ghềnh nhất…'],
+  [16.2, 17.6, '…nhưng xu hướng 10 năm là <b>405 triệu</b>.'],
+];
+const capsEl = document.getElementById('caps');
+const capEls = CAPS.map(([, , html]) => {
+  const d = document.createElement('div'); d.className = 'abs cap'; d.innerHTML = html; capsEl.appendChild(d); return d;
+});
+
+const $ = (id) => document.getElementById(id);
+const show = (el, o, dy = 0) => { el.style.opacity = o; el.style.transform = `translateY(${(1 - o) * dy}px)`; };
+
+function render(t) {
+  show($('brand'), p(t, 0, 0.6));
+  show($('hook'), p(t, 0.2, 1.0), 20);
+
+  // act 1: the line chart tells the story one path at a time
+  const lineVis = p(t, 3.0, 3.8) * (1 - p(t, 17.6, 18.0));
+  show($('lineCard'), lineVis, 24);
+  if (lineVis > 0) lineChart.setOption(lineOption(t), true);
+  CAPS.forEach(([a, b], i) => show(capEls[i], fade(t, a, a + 0.35, b - 0.3, b), 14));
+
+  // act 2: one key number → strip → bar chart → insight
+  show($('key'), p(t, 17.9, 18.5), 20);
+  $('keyNum').textContent = num(lerp(0, 226, p(t, 18.0, 19.2)));
+  show($('strip'), p(t, 18.4, 19.0), 16);
+  const barVis = p(t, 18.0, 18.6);
+  show($('barCard'), barVis, 20);
+  if (barVis > 0) barChart.setOption(barOption(t), true);
+  show($('banner'), p(t, 20.6, 21.3), 16);
+  show($('source'), p(t, 21.4, 22.0));
+  show($('foot'), p(t, 21.6, 22.3), 12);
+}
+
+TH.run({ duration: 24, hold: 3, render });
+</script>
+</body>
+</html>
